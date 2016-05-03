@@ -5,7 +5,7 @@ job "microbot" {
 
   # Rolling updates
   update {
-    stagger = "10s"
+    stagger      = "10s"
     max_parallel = 5
   }
 
@@ -15,30 +15,37 @@ job "microbot" {
 
     task "microbot" {
       driver = "docker"
+
       config {
         image = "dontrebootme/microbot:v1"
+
         port_map {
           http = 80
         }
       }
+
       service {
         port = "http"
+
         check {
-          type = "http"
-          path = "/"
+          type     = "http"
+          path     = "/"
           interval = "10s"
-          timeout = "2s"
+          timeout  = "2s"
         }
       }
+
       env {
         DEMO_NAME = "nomad-intro"
       }
+
       resources {
-        cpu = 100
+        cpu    = 100
         memory = 32
+
         network {
           mbits = 100
-          port "http" {}
+          port  "http"{}
         }
       }
     }
