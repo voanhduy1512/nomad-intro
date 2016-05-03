@@ -10,6 +10,7 @@ Vagrant.configure(2) do |config|
     c1.vm.provision "shell", inline: "hostnamectl set-hostname consul"
     c1.vm.provision "shell", inline: "cd /vagrant/consul && make deps install install-server"
     c1.vm.provision "shell", inline: "hostess add consul $(</tmp/self.ip)"
+    c1.vm.provision "docker"
     config.vm.provider "virtualbox" do |v|
       v.memory = 256
       v.cpus = 1
@@ -24,6 +25,7 @@ Vagrant.configure(2) do |config|
     n.vm.provision "shell", inline: "consul join 10.7.0.15"
     n.vm.provision "shell", inline: "cd /vagrant/nomad && make deps install install-server"
     n.vm.provision "shell", inline: "hostess add nomad $(</tmp/self.ip)"
+    n.vm.provision "docker"
     config.vm.provider "virtualbox" do |v|
       v.memory = 256
       v.cpus = 1
@@ -35,9 +37,9 @@ Vagrant.configure(2) do |config|
     config.vm.define "docker#{d}" do |node|
       node.vm.network "private_network", ip: "10.7.0.2#{d}" # 10.7.0.21, 10.7.0.22, 10.7.0.23
       node.vm.provision "shell", inline: "hostnamectl set-hostname docker#{d}"
-      node.vm.provision "docker" # Just install it
       node.vm.provision "shell", inline: "cd /vagrant/nomad && make install install-client"
       node.vm.provision "shell", inline: "hostess add docker#{d} $(</tmp/self.ip)"
+      node.vm.provision "docker"
       config.vm.provider "virtualbox" do |v|
         v.memory = 1024
         v.cpus = 1
