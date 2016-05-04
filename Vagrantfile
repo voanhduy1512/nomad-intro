@@ -11,6 +11,7 @@ Vagrant.configure(2) do |config|
     c1.vm.provision "shell", inline: "cd /vagrant/consul && make deps install install-server"
     c1.vm.provision "shell", inline: "hostess add consul $(</tmp/self.ip)"
     c1.vm.provision "docker"
+    c1.vm.provision "shell", inline: "cp /vagrant/docker.conf /etc/default/docker && sudo restart docker"
     config.vm.provider "virtualbox" do |v|
       v.memory = 256
       v.cpus = 1
@@ -26,6 +27,7 @@ Vagrant.configure(2) do |config|
     n.vm.provision "shell", inline: "cd /vagrant/nomad && make deps install install-server"
     n.vm.provision "shell", inline: "hostess add nomad $(</tmp/self.ip)"
     n.vm.provision "docker"
+    n.vm.provision "shell", inline: "cp /vagrant/docker.conf /etc/default/docker && sudo restart docker"
     config.vm.provider "virtualbox" do |v|
       v.memory = 256
       v.cpus = 1
@@ -40,6 +42,7 @@ Vagrant.configure(2) do |config|
       node.vm.provision "shell", inline: "cd /vagrant/nomad && make install install-client"
       node.vm.provision "shell", inline: "hostess add docker#{d} $(</tmp/self.ip)"
       node.vm.provision "docker"
+      node.vm.provision "shell", inline: "cp /vagrant/docker.conf /etc/default/docker && sudo restart docker"
       config.vm.provider "virtualbox" do |v|
         v.memory = 1024
         v.cpus = 1
