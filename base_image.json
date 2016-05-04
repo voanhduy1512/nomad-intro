@@ -1,0 +1,20 @@
+
+{
+  "builders": [{
+    "type": "virtualbox-ovf",
+    "_source_path": "This is the link to pre-built virtualbox image. Need to run vagrant box add ubuntu/trusty64 first",
+    "source_path": "~/.vagrant.d/boxes/ubuntu-VAGRANTSLASH-trusty64/20160406.0.0/virtualbox/box.ovf",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "shutdown_command": "echo 'packer' | sudo -S shutdown -P now"
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "script": "provision.sh"
+  }],
+  "post-processors": [
+    {
+      "type": "vagrant"
+    }
+  ]
+}
