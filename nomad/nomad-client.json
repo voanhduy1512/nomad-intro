@@ -8,9 +8,6 @@
   "client": {
     "enabled": true,
     "network_interface": "eth1",
-    "servers": [ "10.7.0.10:4647" ],
-    "options": {
-      "docker.endpoint": "127.0.0.1:2375"
-    }
+    "servers": [ "10.7.0.10:4647" ]
   }
 }
