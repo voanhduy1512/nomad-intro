@@ -1,10 +1,10 @@
 {
-    "advertise_addr": "ADDR",
+    "advertise_addr": "SELFIP",
     "client_addr": "0.0.0.0",
     "data_dir": "/var/lib/consul",
     "datacenter": "nomad-intro",
     "enable_syslog": true,
-    "log_level": "INFO",
-    "ui_dir": "/opt/consul-ui",
+    "log_level": "DEBUG",
+    "ui": true,
     "encrypt": "KnqifJT6qkF0X+Zx9spnjg=="
 }

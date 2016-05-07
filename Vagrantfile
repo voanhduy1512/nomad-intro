@@ -2,16 +2,14 @@
 # vi: set ft=ruby :
 
 Vagrant.configure(2) do |config|
-  config.vm.box = "cbednarski/ubuntu-1404"
+  config.vm.box = "nomad-intro"
 
   config.vm.define "consul" do |c1|
+    c1.vm.hostname = "consul"
     c1.vm.network "private_network", ip: "10.7.0.15"
-    c1.vm.provision "docker"
-    c1.vm.provision "shell", inline: "cp /vagrant/docker.conf /etc/default/docker && sudo restart docker"
+    c1.vm.provision "shell", inline: "echo 10.7.0.15 > /tmp/cluster_ip"
 
-    c1.vm.provision "shell", inline: "hostnamectl set-hostname consul"
-    c1.vm.provision "shell", inline: "cd /vagrant/consul && make deps install install-server"
-    c1.vm.provision "shell", inline: "hostess add consul $(</tmp/self.ip)"
+    c1.vm.provision "shell", inline: "cd /vagrant/consul && make install-server"
     config.vm.provider "virtualbox" do |v|
       v.memory = 256
       v.cpus = 1
@@ -19,15 +17,14 @@ Vagrant.configure(2) do |config|
   end
 
   config.vm.define "nomad" do |n|
+    n.vm.hostname = "nomad"
     n.vm.network "private_network", ip: "10.7.0.10"
-    n.vm.provision "docker"
-    n.vm.provision "shell", inline: "cp /vagrant/docker.conf /etc/default/docker && sudo restart docker"
+    n.vm.provision "shell", inline: "echo 10.7.0.10 > /tmp/cluster_ip"
 
-    n.vm.provision "shell", inline: "hostnamectl set-hostname nomad"
-    n.vm.provision "shell", inline: "cd /vagrant/consul && make install install-client" # install consul
-    n.vm.provision "shell", inline: "consul join 10.7.0.15"
-    n.vm.provision "shell", inline: "cd /vagrant/nomad && make deps install install-server"
-    n.vm.provision "shell", inline: "hostess add nomad $(</tmp/self.ip)"
+    # n.vm.provision "shell", inline: "cd /vagrant/consul && make install-client" # install consul
+    # n.vm.provision "shell", inline: "consul join 10.7.0.15"
+
+    n.vm.provision "shell", inline: "cd /vagrant/nomad && make install-server"
     config.vm.provider "virtualbox" do |v|
       v.memory = 256
       v.cpus = 1
@@ -36,13 +33,11 @@ Vagrant.configure(2) do |config|
 
   (1..3).each do |d|
     config.vm.define "docker#{d}" do |node|
+      node.vm.hostname = "docker#{d}"
       node.vm.network "private_network", ip: "10.7.0.2#{d}" # 10.7.0.21, 10.7.0.22, 10.7.0.23
-      node.vm.provision "docker"
-      node.vm.provision "shell", inline: "cp /vagrant/docker.conf /etc/default/docker && sudo restart docker"
+      node.vm.provision "shell", inline: "echo 10.7.0.2#{d} > /tmp/cluster_ip"
 
-      node.vm.provision "shell", inline: "hostnamectl set-hostname docker#{d}"
-      node.vm.provision "shell", inline: "cd /vagrant/nomad && make install install-client"
-      node.vm.provision "shell", inline: "hostess add docker#{d} $(</tmp/self.ip)"
+      node.vm.provision "shell", inline: "cd /vagrant/nomad && make install-client"
       config.vm.provider "virtualbox" do |v|
         v.memory = 1024
         v.cpus = 1

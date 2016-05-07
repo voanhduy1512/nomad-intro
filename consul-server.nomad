@@ -1,12 +1,17 @@
-job "consul" {
+job "consul-server" {
   region = "global"
 
   datacenters = ["nomad-intro"]
 
   type = "system"
 
+  constraint {
+    attribute = "${meta.consul-server}"
+    value     = "true"
+  }
+
   group "consul" {
-    task "consul-client" {
+    task "consul-server" {
       driver = "docker"
 
       config {
@@ -27,6 +32,10 @@ job "consul" {
           "KnqifJT6qkF0X+Zx9spnjg==",
           "-client",
           "0.0.0.0",
+          "-server",
+          "-ui",
+          "-bootstrap-expect",
+          "1",
         ]
       }
 
