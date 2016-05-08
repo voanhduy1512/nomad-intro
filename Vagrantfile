@@ -4,18 +4,6 @@
 Vagrant.configure(2) do |config|
   config.vm.box = "nomad-intro"
 
-  config.vm.define "consul" do |c1|
-    c1.vm.hostname = "consul"
-    c1.vm.network "private_network", ip: "10.7.0.15"
-    c1.vm.provision "shell", inline: "echo 10.7.0.15 > /tmp/cluster_ip"
-
-    c1.vm.provision "shell", inline: "cd /vagrant/consul && make install-server"
-    config.vm.provider "virtualbox" do |v|
-      v.memory = 256
-      v.cpus = 1
-    end
-  end
-
   config.vm.define "nomad" do |n|
     n.vm.hostname = "nomad"
     n.vm.network "private_network", ip: "10.7.0.10"
@@ -25,6 +13,18 @@ Vagrant.configure(2) do |config|
     # n.vm.provision "shell", inline: "consul join 10.7.0.15"
 
     n.vm.provision "shell", inline: "cd /vagrant/nomad && make install-server"
+    config.vm.provider "virtualbox" do |v|
+      v.memory = 256
+      v.cpus = 1
+    end
+  end
+
+  config.vm.define "balancer" do |c1|
+    c1.vm.hostname = "balancer"
+    c1.vm.network "private_network", ip: "10.7.0.15"
+    c1.vm.provision "shell", inline: "echo 10.7.0.15 > /tmp/cluster_ip"
+
+    c1.vm.provision "shell", inline: "cd /vagrant/nomad && make install-balancer"
     config.vm.provider "virtualbox" do |v|
       v.memory = 256
       v.cpus = 1

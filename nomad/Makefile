@@ -15,3 +15,12 @@ install-client:
 	cp /vagrant/nomad/nomad.upstart.conf /etc/init/nomad.conf
 	restart nomad || start nomad
 	sleep 1
+
+install-balancer:
+	sed 's/SELFIP/'`cat /tmp/cluster_ip`'/g' /vagrant/nomad/base.hcl > /etc/nomad.d/base.hcl
+	cp /vagrant/nomad/client.hcl /etc/nomad.d/client.hcl
+	cp /vagrant/nomad/balancer.hcl /etc/nomad.d/balancer.hcl
+	# Setup nomad service and start it
+	cp /vagrant/nomad/nomad.upstart.conf /etc/init/nomad.conf
+	restart nomad || start nomad
+	sleep 1

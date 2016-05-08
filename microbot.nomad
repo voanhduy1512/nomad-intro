@@ -33,6 +33,8 @@ job "microbot" {
           interval = "10s"
           timeout  = "2s"
         }
+
+        tags = ["urlprefix-/"]
       }
 
       env {

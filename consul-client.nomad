@@ -27,7 +27,7 @@ job "consul-client" {
           "-dc",
           "nomad-intro",
           "-join",
-          "10.7.0.15",
+          "10.7.0.10",
           "-encrypt",
           "KnqifJT6qkF0X+Zx9spnjg==",
           "-client",

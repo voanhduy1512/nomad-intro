@@ -26,8 +26,6 @@ job "consul-server" {
           "${NOMAD_IP_consul_8500}",
           "-dc",
           "nomad-intro",
-          "-join",
-          "10.7.0.15",
           "-encrypt",
           "KnqifJT6qkF0X+Zx9spnjg==",
           "-client",
