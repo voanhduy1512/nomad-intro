@@ -1,0 +1,5 @@
+client {
+  meta {
+    balancer = "true"
+  }
+}
